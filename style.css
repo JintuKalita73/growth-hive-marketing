@@ -571,37 +571,99 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { transform: translate
 .portfolio-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px;
 }
-.portfolio-card { display: block; border-radius: var(--radius-lg); overflow: hidden; }
+.portfolio-card { display: block; border-radius: var(--radius-lg); overflow: hidden; transition: var(--transition); }
 .portfolio-card.hidden { display: none; }
-.portfolio-card-inner { border-radius: var(--radius-lg); overflow: hidden; position: relative; }
+
+/* Gradient border wrapper using padding trick */
+.portfolio-card-inner {
+  border-radius: var(--radius-lg); overflow: hidden;
+  position: relative;
+  padding: 3px; /* border thickness */
+  background: linear-gradient(135deg, #0f3460, #FFC107, #0f3460); /* default gradient border */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  transition: var(--transition);
+}
+.portfolio-card:hover .portfolio-card-inner {
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  transform: translateY(-6px);
+}
+
+/* Inner actual card box */
+.portfolio-thumb-wrapper {
+  border-radius: calc(var(--radius-lg) - 3px);
+  overflow: hidden;
+  position: relative;
+}
+
 .portfolio-thumb {
   height: 280px; position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
 }
+
+/* Gradient backgrounds for when NO image is added */
 .graphic-1 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
 .graphic-2 { background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%); }
 .graphic-3 { background: linear-gradient(135deg, #373b44 0%, #4286f4 100%); }
-.video-1 { background: linear-gradient(135deg, #1a1a2e 0%, #533483 100%); }
-.video-2 { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
-.video-3 { background: linear-gradient(135deg, #360033 0%, #0b8793 100%); }
+.video-1   { background: linear-gradient(135deg, #1a1a2e 0%, #533483 100%); }
+.video-2   { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
+.video-3   { background: linear-gradient(135deg, #360033 0%, #0b8793 100%); }
+
+/* Per-card gradient BORDER colors */
+.portfolio-card:nth-child(1) .portfolio-card-inner { background: linear-gradient(135deg, #0f3460, #4286f4, #0f3460); }
+.portfolio-card:nth-child(2) .portfolio-card-inner { background: linear-gradient(135deg, #2d1b69, #11998e, #2d1b69); }
+.portfolio-card:nth-child(3) .portfolio-card-inner { background: linear-gradient(135deg, #373b44, #4286f4, #373b44); }
+.portfolio-card:nth-child(4) .portfolio-card-inner { background: linear-gradient(135deg, #1a1a2e, #533483, #1a1a2e); }
+.portfolio-card:nth-child(5) .portfolio-card-inner { background: linear-gradient(135deg, #0f2027, #2c5364, #0f2027); }
+.portfolio-card:nth-child(6) .portfolio-card-inner { background: linear-gradient(135deg, #360033, #0b8793, #360033); }
+
+/* Hover glow per card */
+.portfolio-card:nth-child(1):hover .portfolio-card-inner { box-shadow: 0 16px 48px rgba(66,134,244,0.4); }
+.portfolio-card:nth-child(2):hover .portfolio-card-inner { box-shadow: 0 16px 48px rgba(17,153,142,0.4); }
+.portfolio-card:nth-child(3):hover .portfolio-card-inner { box-shadow: 0 16px 48px rgba(66,134,244,0.4); }
+.portfolio-card:nth-child(4):hover .portfolio-card-inner { box-shadow: 0 16px 48px rgba(83,52,131,0.45); }
+.portfolio-card:nth-child(5):hover .portfolio-card-inner { box-shadow: 0 16px 48px rgba(44,83,100,0.45); }
+.portfolio-card:nth-child(6):hover .portfolio-card-inner { box-shadow: 0 16px 48px rgba(11,135,147,0.45); }
+
+/* Image inside card — full cover */
+.portfolio-thumb img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  z-index: 0;
+}
+.portfolio-card:hover .portfolio-thumb img { transform: scale(1.06); }
+
+/* Video inside card */
+.portfolio-thumb video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  z-index: 0;
+}
+.portfolio-card:hover .portfolio-thumb img { transform: scale(1.06); }
 
 .portfolio-bg-pattern {
-  position: absolute; inset: 0;
+  position: absolute; inset: 0; z-index: 1;
   background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 1px, transparent 1px);
   background-size: 24px 24px;
+  pointer-events: none;
 }
 .port-icon { font-size: 3rem; z-index: 1; transition: transform 0.4s ease; }
 .play-btn {
-  position: absolute; bottom: 16px; right: 16px; z-index: 2;
+  position: absolute; bottom: 16px; right: 16px; z-index: 3;
   width: 44px; height: 44px; background: var(--yellow);
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-size: 1rem; color: var(--black); box-shadow: 0 4px 16px rgba(255,193,7,0.5);
+  transition: var(--transition);
 }
+.portfolio-card:hover .play-btn { transform: scale(1.1); }
 
 .portfolio-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(8,27,58,0.95) 100%);
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(180deg, transparent 20%, rgba(8,27,58,0.97) 100%);
   opacity: 0; transition: opacity 0.4s ease;
   display: flex; align-items: flex-end; padding: 24px;
 }
@@ -643,6 +705,14 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { transform: translate
   display: flex; align-items: center; justify-content: center;
   transition: var(--transition); min-width: 160px; cursor: default;
   filter: grayscale(1) brightness(0.5);
+}
+.client-logo img{
+  max-width: 150px;
+  max-height: 60px;
+  width: auto;
+  height: auto;
+  object-fit: cov;
+  display: block;
 }
 .client-logo:hover { filter: grayscale(0) brightness(1); border-color: rgba(255,193,7,0.3); background: rgba(255,193,7,0.05); }
 .client-name {
