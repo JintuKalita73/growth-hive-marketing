@@ -1033,6 +1033,24 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { transform: translate
   /* Cursor - hide on touch */
   #cursor, #cursor-follower { display: none; }
   body { cursor: auto; }
+  
+  /* Hide large hero orbs on mobile */
+.hero-orb-1,
+.hero-orb-2,
+.hero-orb-3 {
+  display: none;
+}
+
+/* Prevent horizontal overflow */
+html,
+body {
+  overflow-x: hidden;
+}
+
+section {
+  overflow-x: hidden;
+  max-width: 100%;
+}
 }
 
 /* =============================================
@@ -1045,4 +1063,16 @@ body:has(a:hover) #cursor, body:has(button:hover) #cursor { transform: translate
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .newsletter-form { flex-direction: column; }
   .whatsapp-float { bottom: 20px; right: 20px; }
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+section {
+  max-width: 100%;
+  overflow-x: hidden;
 }
